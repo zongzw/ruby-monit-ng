@@ -1,0 +1,33 @@
+
+monit_objects:
+- type: netperformance
+  hosts:
+  - cluster_name: YS
+    ip_address: [172.17.0.50]
+  - cluster_name: YP
+    ip_address: [172.17.4.50]
+  - cluster_name: BMetal
+    ip_address: [172.16.11.100]
+  - cluster_name: Dedi01
+    ip_address: [172.17.8.40]
+  - cluster_name: Dedi02
+    ip_address: [172.17.12.80]
+  - cluster_name: Dedi03
+    ip_address: [172.17.14.50]
+  username: networkguest
+  password: sw6tuswu4rUc
+  iperf_port: 3000
+  iperf_time: 10
+  basetarget: netperformance
+  items: [netperf_intercloud]
+  monit_time: ['12:00', '00:00']
+
+monit_intervals:
+  default: 60
+  netperf_intercloud: 60
+
+marmot_info:
+  collector: <%= p("monitinfo.collector")%>
+  pin_code: <%= p("monitinfo.pin_code")%>
+  org_env: <%= p("monitinfo.org_env")%>
+

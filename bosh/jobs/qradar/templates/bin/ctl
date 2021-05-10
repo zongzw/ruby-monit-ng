@@ -1,0 +1,48 @@
+#!/bin/bash
+
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+# Setup env vars and folders for the webapp_ctl script
+source /var/vcap/jobs/qradar/helpers/ctl_setup.sh 'qradar'
+
+export PORT=${PORT:-5000}
+export LANG=en_US.UTF-8
+
+case $1 in
+
+  start)
+    pid_guard $PIDFILE $JOB_NAME
+
+    # store pid in $PIDFILE
+    echo $$ > $PIDFILE
+
+    #exec chpst -u vcap:vcap qradar \
+    #     >>$LOG_DIR/$JOB_NAME.log 2>&1
+
+    workhome=/var/vcap/jobs/qradar
+    mkdir -p $workhome/data/logs
+    $workhome/packages/ruby2.2.2/bin/ruby $workhome/packages/monit_ng/bin/monit-ng.rb \
+    --config $workhome/config/monit.yml \
+    --module qradar --logdir /var/vcap/sys/log/qradar
+
+    #pid=`ps -ef | grep monit-fg.rb | grep -v grep | awk -F' ' '{print $2}'
+    #echo $pid > $PIDFILE
+
+    ;;
+
+  stop)
+    kill_and_wait $PIDFILE
+    pid=`ps -ef | grep "module qradar" | grep -v grep | awk -F' ' '{print $2}'`
+    if [ -n "$pid" ]; then
+        kill -9 $pid
+    fi
+
+    ;;
+  *)
+    echo "Usage: qradar_ctl {start|stop}"
+
+    ;;
+
+esac
+exit 0

@@ -1,0 +1,34 @@
+---
+name: monit_sw
+packages:
+- ruby2.2.2
+- monit_ng
+templates:
+  bin/ctl: bin/ctl
+  bin/monit_debugger: bin/monit_debugger
+  data/properties.sh.erb: data/properties.sh
+  data/monit.yml.erb: config/monit.yml
+  helpers/ctl_setup.sh: helpers/ctl_setup.sh
+  helpers/ctl_utils.sh: helpers/ctl_utils.sh
+
+properties:
+  switch_ios.ip_address:
+    description: the ios switch ip address to be monited.
+  switch_nexus.ip_address:
+    description: the nexus switch ip address to be monited.
+  switch.community_name:
+    description: community name for moniting
+  switch.username:
+    description: the username to login switch backend
+  switch.password:
+    description: the password to login switch backend
+  switch.basetarget:
+    description: base target for switch metrics.
+  traffic_topx:
+    description: top x for the interface to monit since there are too many interface in a vlan.
+  monitinfo.collector:
+    description: marmot collector which receive metrics data.
+  monitinfo.pin_code:
+    description: the pincode to connect to env
+  monitinfo.org_env:
+    description: monitor org and env to put the metrics

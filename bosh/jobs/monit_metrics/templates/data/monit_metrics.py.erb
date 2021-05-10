@@ -1,0 +1,157 @@
+import os
+import sys
+import json
+import time
+import urllib2
+import urllib
+import logging
+from logging.handlers import RotatingFileHandler
+
+interval = <%=p("metrics.interval")%>
+jobname = "<%=p("metrics.jobname")%>"
+pin_code = "<%=p("monitinfo.pin_code")%>"
+target = "<%=p("metrics.target")%>"
+influxurl = "<%=p("metrics.influxurl")%>"
+influxuser = '<%=p("metrics.influxuser")%>' 
+influxpass = '<%=p("metrics.influxpass")%>' 
+collectorurl = "<%=p("metrics.collectorurl")%>"
+
+filepath = os.path.realpath(__file__)
+dirpath = os.path.dirname(filepath)
+jconf = os.path.join(dirpath, "list")
+patterns = []
+orig = {}
+result = {}
+status = {}
+
+syslogpath = "/var/vcap/sys/log"
+logpath = os.path.join(syslogpath, jobname)
+if os.path.isdir(syslogpath) and not os.path.isdir(logpath): 
+    os.mkdir(logpath)
+logfile = os.path.join(logpath if os.path.isdir(logpath) else dirpath, "logfile")
+FORMAT = '%(asctime)-15s: %(levelname)-5s %(message)s'
+formatter = logging.Formatter(FORMAT)
+logger = logging.getLogger("")
+logger.setLevel(logging.DEBUG)
+handler = RotatingFileHandler(logfile, maxBytes=1024*1024*1024*128, backupCount=5)
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+
+def update_patterns(config):
+    global patterns
+    with open(config, 'r') as fr: 
+        content = json.load(fr)
+        if type(content) != type([]):
+            logger.error("wrong format of content: %s" % jconf)
+            return
+        patterns = []
+        for n in content: 
+            patterns.append(n)
+
+        logger.info("pattern list: %s" % patterns)
+            
+
+def request_metrics(pattern):
+    global influxurl
+    logger.debug("in request_metrics")
+    url = influxurl
+    param = {
+        'u': influxuser, 
+        'p': influxpass, 
+        'q': 'list series /%s/' % pattern
+    }
+    logger.info("http request(%s, %s)" % (url, param))
+    try: 
+        response = urllib2.urlopen("%s?%s" % (url, urllib.urlencode(param)))
+        logger.info("code: %d" % (response.code))
+        content = response.read()
+        logger.info("content: %s ..." % json.dumps(content)[0:100])
+        return content
+    except urllib2.HTTPError, e:
+        logger.error("failed to do http request, urllib2.HTTPError: %d, %s" % (e.code, e))
+
+def parse_metrics(pattern, jsoncon):
+    global result
+    logger.debug("in parse_metrics")
+    try: 
+        jc = json.loads(jsoncon)
+        result[pattern] = []
+        for n in jc[0]['points']:
+            result[pattern].append(n[1])
+        logger.info("count %s ... -> %d" % (jsoncon[0:100], len(jc[0]['points'])))
+    except Exception, e:
+        logger.error("failed to count metrics: %s" % e)
+
+def compare_result(pattern):
+    global orig
+    global status
+
+    if not pattern in orig: 
+        return
+
+    l1 = list(set(orig[pattern]) - set(result[pattern]))
+    l2 = list(set(result[pattern]) - set(orig[pattern]))
+
+    status[pattern] = [l1, l2]
+    logger.info("add to status: %s: %s" % (pattern, status[pattern]))
+
+def send_status():
+    global status
+    global collectorurl
+
+    if len(status) == 0: 
+        return
+
+    data = {
+        "pin_code": pin_code, 
+        "data": {
+            "target": target,
+            "metrics": []
+        }
+    }
+
+    for n in status.keys(): 
+        
+        data['data']['metrics'].append(
+            {
+                'instance': n,
+                'status': "%d" % (len(status[n][1]) if (len(status[n][1]) != 0) else -len(status[n][0])), 
+                'details': "+ %s; - %s" % (status[n][1], status[n][0]),
+            }
+        )
+
+    logger.info("about to send data: %s" % data)
+    url = collectorurl
+    try: 
+        params = {"Content-Type": "application/json"}
+        request = urllib2.Request(url, json.dumps(data), params)
+        response = urllib2.urlopen(request)
+        logger.info("success to post status")
+
+    except urllib2.HTTPError, e:
+        logger.error("failed to post metrics to marmot: %d, %s" % (e.code, e))
+        raise Exception("failed to send metrics to marmot.")
+
+
+if __name__ == "__main__":
+
+    while True: 
+        try:
+            logger.info("start to work: ")
+            update_patterns(jconf)
+        
+            status = {}; result = {}
+    
+            for n in patterns: 
+                parse_metrics(n, request_metrics(n))
+                compare_result(n)
+            send_status()
+
+            orig = result
+        
+            logger.info("work over ")
+        except Exception, e:
+            logger.error("main flow exception: %s" % e)
+        
+        time.sleep(interval)
+

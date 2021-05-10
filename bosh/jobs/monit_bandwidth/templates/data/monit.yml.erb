@@ -1,0 +1,33 @@
+
+monit_objects:
+- type: bandwidth
+  interfaces:
+  - ip_address: 10.20.2.41
+    interface_name: [ag-mgmt,ag-staging]
+    bandwidth_in_Mbps: [10, 60]
+    cluster_name: fg-cl01
+    device: fortigate
+    community: monit_fg
+  - ip_address: 10.20.2.42
+    interface_name: [ag-bmetal,ag-iotp,ag-public]
+    bandwidth_in_Mbps: [60, 60, 60]
+    cluster_name: fg-cl02
+    device: fortigate
+    community: monit_fg
+  - ip_address: 10.20.2.43
+    interface_name: [ag-d1,ag-d2,ag-d3]
+    bandwidth_in_Mbps: [60, 60, 60]
+    cluster_name: fg-cl03
+    device: fortigate
+    community: monit_fg
+  basetarget: bandwidth
+  sample_interval: 12 #in seconds
+  short_term: 60 #short term period in seconds
+  long_term: 300 #long term period in seconds
+
+
+marmot_info:
+  collector: <%= p("monitinfo.collector")%>
+  pin_code: <%= p("monitinfo.pin_code")%>
+  org_env: <%= p("monitinfo.org_env")%>
+

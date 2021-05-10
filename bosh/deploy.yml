@@ -1,0 +1,118 @@
+
+---
+name: marmot-agent-cn-customized
+director_uuid: 49047615-7420-427f-b8ee-c1c8ad3ba7b4
+compilation:
+  workers: 1
+  network: default
+  reuse_compilation_vms: true
+  cloud_properties:
+    instance_type: cf.4cpu_4gb_20gb
+    availability_zone: nova
+releases:
+- name: monit_ng
+  version: latest
+update:
+  canaries: 1
+  canary_watch_time: 30000-360000
+  update_watch_time: 30000-360000
+  max_in_flight: 1
+  max_errors: 1
+  serial: true
+networks:
+- name: default
+  type: dynamic
+  dns: ["172.17.0.144", "172.16.11.4", "172.16.11.5", "114.114.114.114"]
+  cloud_properties:
+    security_groups:
+    - default
+    net_id: 683bda16-4a06-49e2-9d35-2dc3bd117fb6
+- name: floating
+  type: vip
+  cloud_properties: {}
+jobs:
+- name: monit_ng
+  templates:
+  - name: monit_netperformance
+    release: monit_ng
+  - name: monit_bandwidth
+    release: monit_ng
+  - name: monit_fg
+    release: monit_ng
+  - name: monit_sw
+    release: monit_ng
+  - name: monit_ntp
+    release: monit_ng
+  - name: qradar
+    release: monit_ng
+  - name: monit_nessus
+    release: monit_ng
+  - name: monit_metrics
+    release: monit_ng
+  - name: metrics-service
+    release: monit_ng
+  - name: agent-mon
+    release: monit_ng
+  instances: 1
+  resource_pool: coreNode
+  networks:
+  - name: default
+    default:
+    - dns
+    - gateway
+  - name: floating
+    static_ips:
+    - 172.17.0.27
+resource_pools:
+- name: coreNode
+  network: default
+  size: 1
+  stemcell:
+    name: bosh-openstack-kvm-ubuntu-trusty-go_agent
+    version: 3192
+  cloud_properties:
+    instance_type: cf.2cpu_4gb_40gb
+properties:
+  monitinfo:
+    collector: 172.17.0.148:8080
+    pin_code: kd2!r0c$
+    org_env: bmxcn.allenvs
+  fortigate:
+    ip_address: ["10.20.2.41", "10.20.2.42", "10.20.2.43"]
+    cluster_name: ["fg-cl01", "fg-cl02", "fg-cl03"]
+    community_name: monit_fg
+    username: networkguest
+    password: sw6tuswu4rUc
+    port: 10022
+    basetarget: fortigate
+  sslvpn_tops: 100
+  switch:
+    username: networkguest
+    password: sw6tuswu4rUc
+    community_name: monit_sw
+    basetarget: switch
+  traffic_topx: -1
+  switch_ios:
+    ip_address: ["10.20.2.21", "10.20.2.22", "10.20.2.23", "10.20.2.24", "10.20.2.25", "10.20.2.26"]
+  switch_nexus:
+    ip_address: ["10.20.2.31", "10.20.2.32", "10.20.2.33", "10.20.2.34"]
+  metrics:
+    interval: 7200
+    jobname: monit_metrics
+    target: bmxcn.CYP.metrics
+    influxurl: http://172.17.0.147:8086/db/marmot/series
+    influxuser: romarmot
+    influxpass: Read_0nly
+    collectorurl: http://172.17.0.148:8080/MarmotCollector/api/v1/metrics
+    list: ["^metrics\\.bmxcn\\.CYP\\.estado\\..*", "^metrics\\.bmxcn\\.yf\\.estado\\..*", "^metrics\\.bmxcn\\.ys1\\.estado\\..*", "^metrics\\.bmxcn\\.dedi01\\.estado\\..*", "^metrics\\.bmxcn\\.cnyf\\..*"]
+  metrics_service:
+    collector: http://172.17.0.148:8080/MarmotCollector/api/v1/metrics
+    pin_code: kd2!r0c$
+    port: 8000
+    jobname: metrics-service
+  agent_mon:
+    influxurl: http://172.17.0.147:8086/db/marmot/series
+    influxuser: romarmot
+    influxpass: Read_0nly
+    jobname: agent-mon    
+

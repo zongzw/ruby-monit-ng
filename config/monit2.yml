@@ -1,0 +1,184 @@
+# sample of monit-ng configuration.
+# in bosh release, it would be generated via monit.yml.erb under <job>/data
+monit_objects:
+- type: fortigate
+  ip_address: [10.20.2.41, 10.20.2.42, 10.20.2.43]
+  cluster_name: [fg-cl01, fg-cl02, fg-cl03]
+  community: monit_fg
+  basetarget: fortigate
+  username: networkguest
+  password: sw6tuswu4rUc
+  port: 10022
+  items: [reachable, hwstat, session, traffic, ha, config, sslvpn]
+  tops: 1000
+
+- type: switch
+  ip_address:
+  - 10.20.2.21
+  - 10.20.2.22
+  - 10.20.2.23
+  - 10.20.2.24
+  - 10.20.2.25
+  - 10.20.2.26
+  community: monit_sw
+  basetarget: switch
+  username: networkguest
+  password: sw6tuswu4rUc
+  items: [reachable, hwstat-c2960, traffic, ios-config-update] #
+  excludedvlan: [fddi-default, token-ring-default, fddinet-default, trnet-default]
+  tops: 5
+
+- type: switch
+  ip_address:
+  - 10.20.2.31
+  - 10.20.2.32
+  - 10.20.2.33
+  - 10.20.2.34
+  community: monit_sw
+  basetarget: switch
+  username: networkguest
+  password: sw6tuswu4rUc
+  items: [reachable, hwstat-nexus, traffic, nexus-config-update] #
+  excludedvlan: [default]
+  tops: 5
+
+- type: ntp 
+  ip_address: [10.20.1.1, 10.20.2.1, 10.20.3.9, 10.20.3.17, 10.20.3.25, 10.20.3.33]
+  cluster_name: [IPMI, OOB, YSYF, YP, Dedi01, IOTP]
+  basetarget: ntp
+  query_timeout: 5
+  items: [ntp-alive]
+
+- type: bandwidth
+  interfaces:
+  - ip_address: 10.20.2.41
+    interface_name: [ag-mgmt,ag-staging]
+    bandwidth_in_Mbps: [10, 60]
+    cluster_name: fg-cl01
+    device: fortigate
+    community: monit_fg
+  - ip_address: 10.20.2.42
+    interface_name: [ag-bmetal,ag-iotp,ag-public]
+    bandwidth_in_Mbps: [60, 60, 60]
+    cluster_name: fg-cl02
+    device: fortigate
+    community: monit_fg
+  basetarget: bandwidth
+  sample_interval: 12 #in seconds
+  short_term: 12 #short term period in seconds
+  long_term: 24 #long term period in seconds
+
+- type: netperformance
+  hosts:
+  - cluster_name: YS
+    ip_address: [172.17.0.50]
+  - cluster_name: YP
+    ip_address: [172.17.4.50]
+  - cluster_name: BMetal
+    ip_address: [172.16.11.100]
+  - cluster_name: Dedi01
+    ip_address: [172.17.8.40]
+  - cluster_name: Dedi02
+    ip_address: [172.17.12.80]
+  - cluster_name: Dedi03
+    ip_address: [172.17.14.50]
+  username: networkguest
+  password: sw6tuswu4rUc
+  iperf_port: 3000
+  iperf_time: 10
+  basetarget: netperformance
+  items: [netperf_intercloud]
+  monit_time: ['12:00', '00:00'] #start monit at 12:00 and 00:00
+
+- type: procstats
+  interval: 300
+  ip_address: 172.17.0.40
+  username: monitor
+  password: M0nitor00@ibm
+  basetarget: procstats.ticketproxy
+  processes:
+  - name: ticket_proxy_monitor
+    matches: [monitor]
+  - name: ticket_proxy_remedy
+    matches: [remedy_manager]
+  - name: ticket_proxy_rtc
+    matches: [rtc_manager]
+  - name: ticket_proxy_queue_transfer
+    matches: [queue_transfer_manager]
+
+- type: qradar
+  reachable: [hwstat, qrha]
+  hwstat:
+  - 172.16.11.11
+  - 172.17.0.130
+  - 172.17.0.38
+  - 172.17.0.73
+  - 172.17.4.26
+  - 172.17.8.35
+  - 172.16.11.14
+  qrha:
+  - 172.16.11.11
+  - 172.16.11.14
+  qreps: true
+  community: public
+  snmpport: 8001
+  basetarget: qradar
+  qralert: true
+  tcp_port: 25777
+  qrate_tcp_port: 25111
+  alert_rate_interval: 60
+  qrweb: true
+  weburl: "https://172.16.11.11/console/"
+
+- type: nessus
+  ip_address: [172.16.12.22]
+  basetarget: nessus
+  community: public
+  port: 8834
+  snmpport: 161
+  query_timeout: 5
+  items: [reachable, hwstat]
+  disk_check:
+  - /
+  - /opt/nessus/var/nessus/users
+
+monit_intervals:
+  default: 3600
+  hwstat: 300
+  traffic: 300
+  session: 120
+  ha: 30
+  policy: 3600
+  policy2: 600
+  config: 3600
+  ios-config-update: 14400
+  nexus-config-update: 14400
+  hwstat-c2960: 300
+  hwstat-nexus: 300
+  reachable: 60
+  sslvpn: 120
+  ntp-alive: 10
+  qrha: 120
+  qreps: 60
+  qralert: 60
+  qrweb: 60
+  qrsyslog: 60
+  qrqrate: 60
+  netperf_intercloud: 60 # check time every 60 seconds
+
+marmot_info:
+  collector: 172.17.0.148:8080
+  pin_code: kd2!r0c$
+  org_env: bmxcn.allenvs.test
+
+logs:
+  base_log_file: monit-fg.log
+  rotation_size: 100000
+  max_logs: 10
+
+
+  # 1. multi fgt    Done
+  # 2. policy2      Done
+  # 3. ha           Done
+  # 4. trap         Demo but Dropped
+  # 5. log roller   Done

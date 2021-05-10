@@ -1,0 +1,12 @@
+---
+name: metrics-service
+templates:
+  constants.py.erb: bin/constants.py
+  server.py: bin/server.py
+  ctl.erb: bin/ctl
+
+properties:
+  metrics_service.collector:
+    description: marmot collector which receive metrics data.
+  metrics_service.jobname:
+    description: job's name 

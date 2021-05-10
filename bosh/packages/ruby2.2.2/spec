@@ -1,0 +1,4 @@
+---
+name: ruby2.2.2
+dependencies: []
+files: [ 'ruby2.2.2.tar.gz' ]

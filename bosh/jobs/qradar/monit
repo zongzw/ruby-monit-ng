@@ -1,0 +1,5 @@
+check process qradar
+  with pidfile /var/vcap/sys/run/qradar/qradar.pid
+  start program "/var/vcap/jobs/qradar/bin/monit_debugger qradar_ctl '/var/vcap/jobs/qradar/bin/ctl start'"
+  stop program "/var/vcap/jobs/qradar/bin/monit_debugger qradar_ctl '/var/vcap/jobs/qradar/bin/ctl stop'"
+  group vcap

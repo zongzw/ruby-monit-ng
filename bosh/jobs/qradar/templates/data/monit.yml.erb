@@ -1,0 +1,51 @@
+monit_objects:
+- type: qradar
+  reachable: [hwstat, qrha]
+  hwstat:
+  - 172.16.11.11
+  - 172.17.0.130
+  - 172.17.0.38
+  - 172.17.0.73
+  - 172.17.4.26
+  - 172.17.8.35
+  - 172.16.11.14
+  - 172.17.12.12
+  - 172.17.10.133
+  - 172.16.2.10
+  - 172.17.1.25
+  - 172.17.4.95
+  qrha:
+  - 172.16.11.11
+  - 172.16.11.14
+  qreps: true
+  community: public
+  snmpport: 8001
+  basetarget: qradar
+  qralert: true
+  tcp_port: 25777
+  qrate_tcp_port: 25111
+  alert_rate_interval: 60
+  disk_check:
+  - /
+  - /store
+  - /store/ariel
+  - /store/backup
+  - /store/transient
+  qrweb: true
+  weburl: "https://172.16.11.11/console/"
+
+monit_intervals:
+  default: 3600
+  hwstat: 300
+  reachable: 60
+  qrha: 120
+  qreps: 60
+  qralert: 60
+  qrweb: 60
+  qrsyslog: 60
+  qrqrate: 60
+
+marmot_info:
+  collector: <%= p("monitinfo.collector")%>
+  pin_code: <%= p("monitinfo.pin_code")%>
+  org_env: <%= p("monitinfo.org_env")%>

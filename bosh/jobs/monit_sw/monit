@@ -1,0 +1,5 @@
+check process monit_sw
+  with pidfile /var/vcap/sys/run/monit_sw/monit_sw.pid
+  start program "/var/vcap/jobs/monit_sw/bin/monit_debugger monit_sw_ctl '/var/vcap/jobs/monit_sw/bin/ctl start'"
+  stop program "/var/vcap/jobs/monit_sw/bin/monit_debugger monit_sw_ctl '/var/vcap/jobs/monit_sw/bin/ctl stop'"
+  group vcap

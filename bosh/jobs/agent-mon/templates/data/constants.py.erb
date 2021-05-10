@@ -1,0 +1,17 @@
+#constants
+
+jobname = "<%=p("agent_mon.jobname")%>"
+
+influxurl = "<%=p("agent_mon.influxurl")%>"
+influxuser = "<%=p("agent_mon.influxuser")%>"
+influxpass = "<%=p("agent_mon.influxpass")%>"
+pin_code = "<%=p("agent_mon.pin_code")%>"
+
+logpath = "/var/vcap/sys/log/%s/%s.log" % (jobname, jobname)
+
+monit_json = "/var/vcap/jobs/%s/config/monit.json" % jobname
+
+port = 8000
+localserver = "http://localhost:%d" % port
+metrics_api = "/metrics"
+

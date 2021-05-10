@@ -1,0 +1,5 @@
+check process monit_nessus
+  with pidfile /var/vcap/sys/run/monit_nessus/monit_nessus.pid
+  start program "/var/vcap/jobs/monit_nessus/bin/monit_debugger monit_nessus_ctl '/var/vcap/jobs/monit_nessus/bin/ctl start'"
+  stop program "/var/vcap/jobs/monit_nessus/bin/monit_debugger monit_nessus_ctl '/var/vcap/jobs/monit_nessus/bin/ctl stop'"
+  group vcap

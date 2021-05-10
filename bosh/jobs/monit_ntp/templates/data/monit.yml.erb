@@ -1,0 +1,15 @@
+monit_objects:
+- type: ntp
+  ip_address: [10.20.1.1, 10.20.2.1, 10.20.3.9, 10.20.3.17, 10.20.3.25, 10.20.3.33, 10.20.3.41, 10.20.3.49]
+  cluster_name: [IPMI, OOB, YSYF, YP, Dedi01, IOTP, Dedi02, Dedi03]
+  basetarget: ntp
+  query_timeout: 5
+  items: [ntp-alive]
+
+monit_intervals:
+  ntp-alive: 28800
+
+marmot_info:
+  collector: <%= p("monitinfo.collector")%>
+  pin_code: <%= p("monitinfo.pin_code")%>
+  org_env: <%= p("monitinfo.org_env")%>

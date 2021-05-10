@@ -1,0 +1,5 @@
+check process agent-mon
+  with pidfile /var/vcap/sys/run/agent-mon/agent-mon.pid
+  start program "/var/vcap/jobs/agent-mon/bin/ctl start"
+  stop program "/var/vcap/jobs/agent-mon/bin/ctl stop"
+  group vcap

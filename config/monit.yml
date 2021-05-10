@@ -1,0 +1,44 @@
+# deprecated
+monit_objects:
+- type: fortigate
+  ip_address: 9.112.242.20
+  community: monit_fg
+  serial_number: FG300C
+  basetarget: fortigate
+  username: admin
+  password: landing
+  monit_items:
+  - name: hwstat
+    interval: sec30
+  - name: traffic
+    interval: sec30
+    #ports: # the interested set to monitor, if not set, all ports would be monitored.
+    #- host2-vn
+    #- port8
+  - name: session
+    interval: sec30
+  - name: ha
+    interval: min30
+  - name: policy
+    interval: hour1
+
+monit_interval:
+  hour1: 3600
+  min1: 60
+  min10: 600
+  min30: 1800
+  sec30: 30
+  sec5: 5
+  hour6: 21600
+
+marmot_info:
+  collector: 9.111.108.82:8080
+  pin_code: sf2o@!co
+  org_env: ibm.allenvs
+
+logs:
+  base_log_file: monit-fg.log
+  evaluate_log_file: taishan_evaluation.log
+  rotation_size: 100000
+  max_logs: 10
+  threshold: dev

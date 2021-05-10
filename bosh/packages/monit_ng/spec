@@ -1,0 +1,4 @@
+---
+name: monit_ng
+dependencies: []
+files: ['monit_ng.tar.gz']

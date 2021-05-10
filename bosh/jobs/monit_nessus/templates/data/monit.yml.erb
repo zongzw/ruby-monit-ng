@@ -1,0 +1,22 @@
+monit_objects:
+- type: nessus
+  ip_address: [172.16.12.22]
+  basetarget: nessus
+  community: public
+  port: 8834
+  snmpport: 161
+  query_timeout: 5
+  items: [reachable, hwstat]
+  disk_check:
+  - /
+  - /opt/nessus/var/nessus/users
+
+monit_intervals:
+  default: 3600
+  hwstat: 300
+  reachable: 60
+
+marmot_info:
+  collector: <%= p("monitinfo.collector")%>
+  pin_code: <%= p("monitinfo.pin_code")%>
+  org_env: <%= p("monitinfo.org_env")%>

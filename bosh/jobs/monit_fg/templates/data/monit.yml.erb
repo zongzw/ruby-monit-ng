@@ -1,0 +1,30 @@
+
+monit_objects:
+- type: fortigate
+  ip_address: <%= p("fortigate.ip_address")%>
+  cluster_name: <%= p("fortigate.cluster_name")%>
+  community: <%= p("fortigate.community_name") %>
+  basetarget: <%= p("fortigate.basetarget")%>
+  username: <%= p("fortigate.username")%>
+  password: <%= p("fortigate.password")%>
+  port: <%= p("fortigate.port")%>
+  items: [hwstat, session, traffic, ha, config, sslvpn] # reachable
+  tops: <%= p("sslvpn_tops")%>
+
+monit_intervals:
+  default: 3600
+  hwstat: 300
+  traffic: 300
+  session: 120
+  ha: 30
+  policy: 3600
+  policy2: 3600
+  #reachable: 60
+  sslvpn: 120
+  config: 3600
+
+marmot_info:
+  collector: <%= p("monitinfo.collector")%>
+  pin_code: <%= p("monitinfo.pin_code")%>
+  org_env: <%= p("monitinfo.org_env")%>
+

@@ -1,0 +1,19 @@
+---
+name: agent-mon
+templates:
+  data/constants.py.erb: bin/constants.py
+  data/agent-mon.py: bin/agent-mon.py
+  bin/ctl.erb: bin/ctl
+  data/monit.json.erb: config/monit.json
+
+properties:
+  agent_mon.influxurl:
+    description: influxdb url
+  agent_mon.influxuser:
+    description: username for accessing influxdb
+  agent_mon.influxpass:
+    description: password for accessing influxdb
+  agent_mon.jobname:
+    description: job's name 
+  agent_mon.pin_code:
+    description: pin code 

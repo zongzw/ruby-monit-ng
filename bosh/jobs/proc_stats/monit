@@ -1,0 +1,5 @@
+check process proc_stats
+  with pidfile /var/vcap/sys/run/proc_stats/proc_stats.pid
+  start program "/var/vcap/jobs/proc_stats/bin/monit_debugger proc_stats_ctl '/var/vcap/jobs/proc_stats/bin/ctl start'"
+  stop program "/var/vcap/jobs/proc_stats/bin/monit_debugger proc_stats_ctl '/var/vcap/jobs/proc_stats/bin/ctl stop'"
+  group vcap

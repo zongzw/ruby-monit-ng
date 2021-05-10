@@ -1,0 +1,36 @@
+---
+name: monit_fg
+packages:
+- ruby2.2.2
+- monit_ng
+templates:
+  bin/ctl: bin/ctl
+  bin/monit_debugger: bin/monit_debugger
+  data/properties.sh.erb: data/properties.sh
+  data/monit.yml.erb: config/monit.yml
+  helpers/ctl_setup.sh: helpers/ctl_setup.sh
+  helpers/ctl_utils.sh: helpers/ctl_utils.sh
+
+properties: 
+  fortigate.ip_address:
+    description: the fortigate ip address to be monited.
+  fortigate.port:
+    description: the fortigate port to be monited.
+  fortigate.community_name:
+    description: community name for moniting
+  fortigate.cluster_name:
+    description: a string to identify a fortigate host
+  fortigate.username:
+    description: the username to login fortigate backend
+  fortigate.password:
+    description: the password to login fortigate backend
+  fortigate.basetarget:
+    description: basetarget for fortigate metrics
+  sslvpn_tops:
+    description: top x of ssl vpn connections
+  monitinfo.collector:
+    description: marmot collector which receive metrics data.
+  monitinfo.pin_code:
+    description: the pincode to connect to env
+  monitinfo.org_env:
+    description: monitor org and env to put the metrics

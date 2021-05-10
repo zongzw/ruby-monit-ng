@@ -1,0 +1,5 @@
+check process monit_netperformance
+  with pidfile /var/vcap/sys/run/monit_netperformance/monit_netperformance.pid
+  start program "/var/vcap/jobs/monit_netperformance/bin/monit_debugger monit_netperformance_ctl '/var/vcap/jobs/monit_netperformance/bin/ctl start'"
+  stop program "/var/vcap/jobs/monit_netperformance/bin/monit_debugger monit_netperformance_ctl '/var/vcap/jobs/monit_netperformance/bin/ctl stop'"
+  group vcap

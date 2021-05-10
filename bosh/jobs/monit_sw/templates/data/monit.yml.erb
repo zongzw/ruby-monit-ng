@@ -1,0 +1,34 @@
+monit_objects:
+- type: switch
+  ip_address: <%=p("switch_ios.ip_address")%>
+  community: <%=p("switch.community_name")%>
+  basetarget: <%= p("switch.basetarget")%>
+  username: <%= p("switch.username")%>
+  password: <%= p("switch.password")%>
+  items: [hwstat-c2960, traffic, ios-config-update] # reachable
+  excludedvlan: [fddi-default, token-ring-default, fddinet-default, trnet-default]
+  tops: <%=p("traffic_topx")%>
+
+- type: switch
+  ip_address: <%=p("switch_nexus.ip_address")%>
+  community: <%=p("switch.community_name")%>
+  basetarget: <%= p("switch.basetarget")%>
+  username: <%= p("switch.username")%>
+  password: <%= p("switch.password")%>
+  items: [hwstat-nexus, traffic, nexus-config-update] # reachable
+  excludedvlan: [default]
+  tops: <%=p("traffic_topx")%>
+
+monit_intervals:
+  default: 3600
+  traffic: 300
+  ios-config-update: 3600
+  nexus-config-update: 3600
+  hwstat-c2960: 300
+  hwstat-nexus: 300
+  #reachable: 60
+
+marmot_info:
+  collector: <%= p("monitinfo.collector")%>
+  pin_code: <%= p("monitinfo.pin_code")%>
+  org_env: <%= p("monitinfo.org_env")%>

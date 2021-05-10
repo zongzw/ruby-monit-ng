@@ -1,0 +1,28 @@
+---
+name: monit_metrics
+templates:
+  bin/ctl.erb: bin/ctl
+  data/list.erb: data/list
+  data/monit_metrics.py.erb: data/monit_metrics.py
+
+properties:
+  monitinfo.collector:
+    description: marmot collector which receive metrics data.
+  monitinfo.pin_code:
+    description: the pincode to connect to env
+  metrics.interval:
+    description: interval for next work
+  metrics.jobname:
+    description: job name
+  metrics.target:
+    description: target for result
+  metrics.influxurl:
+    description: influxdb url for query metrics
+  metrics.influxuser:
+    description: influx user
+  metrics.influxpass:
+    description: influx pass
+  metrics.collectorurl:
+    description: influx collector url 
+  metrics.list:
+    description: list for monit. 

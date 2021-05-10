@@ -1,0 +1,5 @@
+check process monit_ntp
+  with pidfile /var/vcap/sys/run/monit_ntp/monit_ntp.pid
+  start program "/var/vcap/jobs/monit_ntp/bin/monit_debugger monit_ntp_ctl '/var/vcap/jobs/monit_ntp/bin/ctl start'"
+  stop program "/var/vcap/jobs/monit_ntp/bin/monit_debugger monit_ntp_ctl '/var/vcap/jobs/monit_ntp/bin/ctl stop'"
+  group vcap

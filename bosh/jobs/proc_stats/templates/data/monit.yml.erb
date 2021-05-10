@@ -1,0 +1,31 @@
+monit_objects:
+- type: procstats
+  interval: 300
+  ip_address: 172.17.0.40
+  username: monitor
+  password: zongzw123!
+  basetarget: procstats.ticketproxy
+  processes:
+  - name: ticket_proxy_monitor
+    matches: [monitor]
+  - name: ticket_proxy_remedy
+    matches: [remedy_manager]
+  - name: ticket_proxy_rtc
+    matches: [rtc_manager]
+  - name: ticket_proxy_queue_transfer
+    matches: [queue_transfer_manager]
+
+- type: procstats
+  interval: 300
+  ip_address: 172.17.0.44
+  username: monitor
+  password: zongzw123!
+  basetarget: procstats.activemq
+  processes:
+  - name: activemq
+    matches: [activemq]
+
+marmot_info:
+  collector: <%= p("monitinfo.collector")%>
+  pin_code: <%= p("monitinfo.pin_code")%>
+  org_env: <%= p("monitinfo.org_env")%>

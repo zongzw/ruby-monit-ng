@@ -1,0 +1,10 @@
+.DS_Store
+.idea/encodings.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/monit_ng.iml
+.idea/vcs.xml
+.idea/workspace.xml
+bosh/src/monit_ng.tar.gz

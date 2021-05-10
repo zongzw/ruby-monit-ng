@@ -1,0 +1,9 @@
+#constants
+
+jobname = "<%=p("metrics_service.jobname")%>"
+logpath = "/var/vcap/sys/log/%s/%s.log" % (jobname, jobname)
+
+collector = "<%=p("metrics_service.collector")%>"
+
+port = 8000
+metrics_api = "/metrics"

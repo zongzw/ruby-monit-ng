@@ -1,0 +1,26 @@
+[
+    {
+        "metrics": "metrics.bmxcn..*.infra.dbbackup_archive",
+        "instances": ".*",
+        "interval": 360,
+        "target": "bmxcn.allenvs.selftest"
+    },
+    {
+        "metrics": "metrics.bmxcn..*.infra.(diegodbbackup|diegodbha)",
+        "instances": ".*",
+        "interval": 360,
+        "target": "bmxcn.allenvs.selftest"
+    },
+    {
+        "metrics": "metrics.bmxcn.allenvs.fortigate..*.config_changed",
+        "instances": ".*",
+        "interval": 3660,
+        "target": "bmxcn.allenvs.selftest"
+    },
+    {
+        "metrics": "metrics.bmxcn.allenvs.switch..*.temperature",
+        "instances": ".*",
+        "interval": 360,
+        "target": "bmxcn.allenvs.selftest"
+    }
+]

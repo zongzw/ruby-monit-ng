@@ -1,0 +1,114 @@
+2017-11-03 13:41:41,599: emitter.py:28  post       INFO  success to post data http://172.17.0.148:8080/MarmotCollector/api/v1/metrics {
+    "data_array":[
+        {
+            "metrics":[
+                {
+                    "attachments":[],
+                    "details":"",
+                    "duration":"0",
+                    "instance":"for-test",
+                    "status":"0.176525",
+                    "timestamp":"1509687666042"
+                },
+                {
+                    "attachments":[],
+                    "details":"",
+                    "duration":"0",
+                    "instance":"for-prod",
+                    "status":"0.620823",
+                    "timestamp":"1509687669402"
+                }
+            ],
+            "sn":"1509687666.042222-0.889213",
+            "target":"bmxcn.allenvs.selftest"
+        }
+    ],
+    "pin_code":"kd2!r0c$"
+} 
+2017-11-03 13:41:41,599: emitter.py:28  post       INFO  success to post data http://172.17.0.148:8080/MarmotCollector/api/v1/metrics {
+    "data_array":[
+        {
+            "metrics":[
+                {
+                    "attachments":[],
+                    "details":"",
+                    "duration":"0",
+                    "instance":"for-test",
+                    "status":"0.176525",
+                    "timestamp":"1509687666042"
+                },
+                {
+                    "attachments":[],
+                    "details":"",
+                    "duration":"0",
+                    "instance":"for-prod",
+                    "status":"0.620823",
+                    "timestamp":"1509687669402"
+                }
+            ],
+            "sn":"1509687666.042222-0.889213",
+            "target":"bmxcn.allenvs.selftest"
+        }
+    ],
+    "pin_code":"kd2!r0c$"
+} 
+2017-11-03 13:45:10,431: emitter.py:28  post       INFO  success to post data http://172.17.0.148:8080/MarmotCollector/api/v1/metrics {
+    "data_array":[
+        {
+            "metrics":[
+                {
+                    "attachments":[],
+                    "details":"",
+                    "duration":"0",
+                    "instance":"for-test",
+                    "status":"0.042564",
+                    "timestamp":"1509687910399"
+                },
+                {
+                    "attachments":[],
+                    "details":"",
+                    "duration":"0",
+                    "instance":"for-prod",
+                    "status":"0.017179",
+                    "timestamp":"1509687910399"
+                }
+            ],
+            "sn":"1509687910.399943-0.351671",
+            "target":"bmxcn.allenvs.selftest"
+        }
+    ],
+    "pin_code":"kd2!r0c$"
+} 
+2017-11-03 13:45:10,431: emitter.py:28  post       INFO  success to post data http://172.17.0.148:8080/MarmotCollector/api/v1/metrics {
+    "data_array":[
+        {
+            "metrics":[
+                {
+                    "attachments":[],
+                    "details":"",
+                    "duration":"0",
+                    "instance":"for-test",
+                    "status":"0.042564",
+                    "timestamp":"1509687910399"
+                },
+                {
+                    "attachments":[],
+                    "details":"",
+                    "duration":"0",
+                    "instance":"for-prod",
+                    "status":"0.017179",
+                    "timestamp":"1509687910399"
+                }
+            ],
+            "sn":"1509687910.399943-0.351671",
+            "target":"bmxcn.allenvs.selftest"
+        }
+    ],
+    "pin_code":"kd2!r0c$"
+} 
+2017-11-03 13:45:13,314: emitter.py:41  get        INFO  http request(http://172.17.0.147:8086/db/marmot/series, {'q': 'select value from "metrics.bmxcn.CYP.sampleApp" limit 10', 'p': 'Read_0nly', 'u': 'romarmot'})
+2017-11-03 13:45:13,314: emitter.py:41  get        INFO  http request(http://172.17.0.147:8086/db/marmot/series, {'q': 'select value from "metrics.bmxcn.CYP.sampleApp" limit 10', 'p': 'Read_0nly', 'u': 'romarmot'})
+2017-11-03 13:45:13,357: emitter.py:44  get        INFO  code: 200
+2017-11-03 13:45:13,357: emitter.py:44  get        INFO  code: 200
+2017-11-03 13:45:13,357: emitter.py:46  get        INFO  content: "[{\"name\":\"metrics.bmxcn.CYP.sampleApp\",\"columns\":[\"time\",\"sequence_number\",\"value\"],\"p ...
+2017-11-03 13:45:13,357: emitter.py:46  get        INFO  content: "[{\"name\":\"metrics.bmxcn.CYP.sampleApp\",\"columns\":[\"time\",\"sequence_number\",\"value\"],\"p ...

@@ -1,0 +1,163 @@
+<%
+marmot_agent_name="marmot-agent-cn-customized"
+director_uuid = "49047615-7420-427f-b8ee-c1c8ad3ba7b4"
+compile_flavor = "cf.4cpu_4gb_20gb"
+instance_flavor = "cf.2cpu_4gb_40gb"
+release_name = "monit_ng"
+network_id = "683bda16-4a06-49e2-9d35-2dc3bd117fb6"
+security_group = "default"
+dns_list = ['172.17.0.144', '172.16.11.4', '172.16.11.5', '114.114.114.114']
+stemcell_name = "bosh-openstack-kvm-ubuntu-trusty-go_agent"
+stemcell_version = "3192"
+collector = "172.17.0.148:8080"
+pin_code = "kd2!r0c$"
+org_env = "bmxcn.allenvs"
+job_name = "monit_ng"
+static_ip = "172.17.0.27"
+
+fortigate_ip_list = ['10.20.2.41', '10.20.2.42', '10.20.2.43']
+fortigate_cluster = ['fg-cl01', 'fg-cl02', 'fg-cl03']
+fortigate_community = "monit_fg"
+fortigate_username = "networkguest"
+fortigate_password = "sw6tuswu4rUc"
+fortigate_port = "10022"
+fortigate_basetarget = "fortigate"
+sslvpn_tops = "100"
+
+switch_ios_iplist = ['10.20.2.21', '10.20.2.22', '10.20.2.23', '10.20.2.24', '10.20.2.25', '10.20.2.26']
+switch_nexus_iplist = ['10.20.2.31', '10.20.2.32', '10.20.2.33', '10.20.2.34']
+switch_community = 'monit_sw'
+switch_basetarget = 'switch'
+switch_username = "networkguest"
+switch_password = "sw6tuswu4rUc"
+switch_basetarget = "switch"
+switch_traffictopx = "-1"
+
+metrics_interval = 7200
+metrics_jobname = "monit_metrics"
+metrics_target = "bmxcn.CYP.metrics"
+metrics_influxurl = "http://172.17.0.147:8086/db/marmot/series"
+metrics_influxuser = "romarmot"
+metrics_influxpass = "Read_0nly"
+metrics_collectorurl = "http://172.17.0.148:8080/MarmotCollector/api/v1/metrics"
+metrics_list = [ "^metrics\\.bmxcn\\.CYP\\.estado\\..*", "^metrics\\.bmxcn\\.yf\\.estado\\..*", "^metrics\\.bmxcn\\.ys1\\.estado\\..*", "^metrics\\.bmxcn\\.dedi01\\.estado\\..*", "^metrics\\.bmxcn\\.cnyf\\..*" ]
+
+%>
+---
+name: <%=marmot_agent_name%>
+director_uuid: <%=director_uuid%>
+compilation:
+  workers: 1
+  network: default
+  reuse_compilation_vms: true
+  cloud_properties:
+    instance_type: <%=compile_flavor%>
+    availability_zone: nova
+releases:
+- name: <%=release_name%>
+  version: latest
+update:
+  canaries: 1
+  canary_watch_time: 30000-360000
+  update_watch_time: 30000-360000
+  max_in_flight: 1
+  max_errors: 1
+  serial: true
+networks:
+- name: default
+  type: dynamic
+  dns: <%=dns_list%>
+  cloud_properties:
+    security_groups:
+    - <%=security_group%>
+    net_id: <%=network_id%>
+- name: floating
+  type: vip
+  cloud_properties: {}
+jobs:
+- name: <%=job_name%>
+  templates:
+  - name: monit_netperformance
+    release: <%=release_name%>
+  - name: monit_bandwidth
+    release: <%=release_name%>
+  - name: monit_fg
+    release: <%=release_name%>
+  - name: monit_sw
+    release: <%=release_name%>
+  - name: monit_ntp
+    release: <%=release_name%>
+  - name: qradar
+    release: <%=release_name%>
+  - name: monit_nessus
+    release: <%=release_name%>
+  - name: monit_metrics
+    release: <%=release_name%>
+  - name: metrics-service
+    release: <%=release_name%>
+  - name: agent-mon
+    release: <%=release_name%>
+  instances: 1
+  resource_pool: coreNode
+  networks:
+  - name: default
+    default:
+    - dns
+    - gateway
+  - name: floating
+    static_ips:
+    - <%=static_ip%>
+resource_pools:
+- name: coreNode
+  network: default
+  size: 1
+  stemcell:
+    name: <%=stemcell_name%>
+    version: <%=stemcell_version%>
+  cloud_properties:
+    instance_type: <%=instance_flavor%>
+properties:
+  monitinfo:
+    collector: <%=collector%>
+    pin_code: <%=pin_code%>
+    org_env: <%=org_env%>
+  fortigate:
+    ip_address: <%=fortigate_ip_list%>
+    cluster_name: <%=fortigate_cluster%>
+    community_name: <%=fortigate_community%>
+    username: <%=fortigate_username%>
+    password: <%=fortigate_password%>
+    port: <%=fortigate_port%>
+    basetarget: <%=fortigate_basetarget%>
+  sslvpn_tops: <%=sslvpn_tops%>
+  switch:
+    username: <%=switch_username%>
+    password: <%=switch_password%>
+    community_name: <%=switch_community%>
+    basetarget: <%=switch_basetarget%>
+  traffic_topx: <%=switch_traffictopx%>
+  switch_ios:
+    ip_address: <%=switch_ios_iplist%>
+  switch_nexus:
+    ip_address: <%=switch_nexus_iplist%>
+  metrics:
+    interval: <%=metrics_interval%>
+    jobname: <%=metrics_jobname%>
+    target: <%=metrics_target%>
+    influxurl: <%=metrics_influxurl%>
+    influxuser: <%=metrics_influxuser%>
+    influxpass: <%=metrics_influxpass%>
+    collectorurl: <%=metrics_collectorurl%>
+    list: <%=metrics_list%>
+  metrics_service:
+    collector: <%=metrics_collectorurl%>
+    pin_code: <%=pin_code%>
+    port: 8000
+    jobname: metrics-service
+  agent_mon:
+    influxurl: <%=metrics_influxurl%>
+    influxuser: <%=metrics_influxuser%>
+    influxpass: <%=metrics_influxpass%>
+    jobname: agent-mon
+    pin_code: <%=pin_code%> 
+
